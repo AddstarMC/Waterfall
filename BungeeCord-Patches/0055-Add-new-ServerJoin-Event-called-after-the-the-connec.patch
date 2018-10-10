@@ -1,0 +1,56 @@
+From 76c25b027221aa8b25a04617278945111aec9bb6 Mon Sep 17 00:00:00 2001
+From: Narimm <benjicharlton@gmail.com>
+Date: Wed, 24 Apr 2019 07:54:44 +1000
+Subject: [PATCH] Add new ServerJoin Event called after the the connection has
+ been completed to a server.
+
+
+diff --git a/api/src/main/java/net/md_5/bungee/api/event/ServerJoinEvent.java b/api/src/main/java/net/md_5/bungee/api/event/ServerJoinEvent.java
+new file mode 100644
+index 00000000..cb92c751
+--- /dev/null
++++ b/api/src/main/java/net/md_5/bungee/api/event/ServerJoinEvent.java
+@@ -0,0 +1,28 @@
++package net.md_5.bungee.api.event;
++
++import lombok.Data;
++import lombok.EqualsAndHashCode;
++import lombok.ToString;
++import net.md_5.bungee.api.connection.ProxiedPlayer;
++import net.md_5.bungee.api.connection.Server;
++import net.md_5.bungee.api.plugin.Event;
++
++/**
++ * Not to be confused with {@link ServerConnectedEvent}, this event is called once
++ * a connection to a server has completed, ie. logged into the server.
++ */
++@Data
++@ToString(callSuper = false)
++@EqualsAndHashCode(callSuper = false)
++public class ServerJoinEvent extends Event
++{
++
++    /**
++     * Player whom the server is for.
++     */
++    private final ProxiedPlayer player;
++    /**
++     * The server itself.
++     */
++    private final Server server;
++}
+diff --git a/proxy/src/main/java/net/md_5/bungee/ServerConnector.java b/proxy/src/main/java/net/md_5/bungee/ServerConnector.java
+index 1375d1e2..22297d09 100644
+--- a/proxy/src/main/java/net/md_5/bungee/ServerConnector.java
++++ b/proxy/src/main/java/net/md_5/bungee/ServerConnector.java
+@@ -15,6 +15,7 @@ import net.md_5.bungee.api.ProxyServer;
+ import net.md_5.bungee.api.config.ServerInfo;
+ import net.md_5.bungee.api.event.ServerConnectEvent;
+ import net.md_5.bungee.api.event.ServerConnectedEvent;
++import net.md_5.bungee.api.event.ServerJoinEvent;
+ import net.md_5.bungee.api.event.ServerKickEvent;
+ import net.md_5.bungee.api.event.ServerSwitchEvent;
+ import net.md_5.bungee.api.score.Objective;
+-- 
+2.17.1
+
