@@ -1,0 +1,725 @@
+From 832f386b5c6328abfcff646c5ef7d0de2ed3fec7 Mon Sep 17 00:00:00 2001
+From: Narimm <benjicharlton@gmail.com>
+Date: Tue, 23 Apr 2019 23:06:11 +1000
+Subject: [PATCH] Tablist changes Add the tablist changes back to Bungee that 
+ had been removed
+
+
+diff --git a/api/src/main/java/net/md_5/bungee/api/GameProfile.java b/api/src/main/java/net/md_5/bungee/api/GameProfile.java
+new file mode 100644
+index 0000000..0755384
+--- /dev/null
++++ b/api/src/main/java/net/md_5/bungee/api/GameProfile.java
+@@ -0,0 +1,28 @@
++package net.md_5.bungee.api;
++
++import java.util.UUID;
++
++import lombok.AllArgsConstructor;
++import lombok.Data;
++import lombok.Getter;
++import lombok.RequiredArgsConstructor;
++
++@RequiredArgsConstructor
++public class GameProfile
++{
++    @Getter
++    private final UUID uniqueId;
++    @Getter
++    private final String username;
++    @Getter
++    private final Property[] properties;
++
++    @Data
++    @AllArgsConstructor
++    public static class Property
++    {
++        private String name;
++        private String value;
++        private String signature;
++    }
++}
+diff --git a/api/src/main/java/net/md_5/bungee/api/connection/ProxiedPlayer.java b/api/src/main/java/net/md_5/bungee/api/connection/ProxiedPlayer.java
+index f745986..1d9f29d 100644
+--- a/api/src/main/java/net/md_5/bungee/api/connection/ProxiedPlayer.java
++++ b/api/src/main/java/net/md_5/bungee/api/connection/ProxiedPlayer.java
+@@ -8,10 +8,12 @@ import net.md_5.bungee.api.ChatMessageType;
+ import net.md_5.bungee.api.CommandSender;
+ import net.md_5.bungee.api.ServerConnectRequest;
+ import net.md_5.bungee.api.SkinConfiguration;
++import net.md_5.bungee.api.GameProfile;
+ import net.md_5.bungee.api.Title;
+ import net.md_5.bungee.api.chat.BaseComponent;
+ import net.md_5.bungee.api.config.ServerInfo;
+ import net.md_5.bungee.api.event.ServerConnectEvent;
++import net.md_5.bungee.api.tab.TabListHandler;
+ import net.md_5.bungee.api.score.Scoreboard;
+ 
+ /**
+diff --git a/api/src/main/java/net/md_5/bungee/api/tab/TabListAdapter.java b/api/src/main/java/net/md_5/bungee/api/tab/TabListAdapter.java
+new file mode 100644
+index 0000000..c46004b
+--- /dev/null
++++ b/api/src/main/java/net/md_5/bungee/api/tab/TabListAdapter.java
+@@ -0,0 +1,49 @@
++package net.md_5.bungee.api.tab;
++
++import lombok.Getter;
++import lombok.NoArgsConstructor;
++import net.md_5.bungee.api.connection.ProxiedPlayer;
++import net.md_5.bungee.protocol.packet.PlayerListHeaderFooter;
++
++@NoArgsConstructor
++public abstract class TabListAdapter implements TabListHandler
++{
++    @Getter
++    private ProxiedPlayer player;
++
++    @Override
++    public void init(ProxiedPlayer player)
++    {
++        this.player = player;
++    }
++
++    @Override
++    public void onConnect()
++    {
++    }
++
++    @Override
++    public void onServerChange()
++    {
++    }
++
++    @Override
++    public void onPingChange(int ping)
++    {
++    }
++
++    @Override
++    public void onDisconnect()
++    {
++    }
++
++    @Override
++    public void onUpdateName()
++    {
++    }
++
++    @Override
++    public void onUpdate(PlayerListHeaderFooter packet)
++    {
++    }
++}
+diff --git a/api/src/main/java/net/md_5/bungee/api/tab/TabListHandler.java b/api/src/main/java/net/md_5/bungee/api/tab/TabListHandler.java
+new file mode 100644
+index 0000000..bbfcfe6
+--- /dev/null
++++ b/api/src/main/java/net/md_5/bungee/api/tab/TabListHandler.java
+@@ -0,0 +1,59 @@
++package net.md_5.bungee.api.tab;
++
++import net.md_5.bungee.api.connection.ProxiedPlayer;
++import net.md_5.bungee.protocol.packet.PlayerListHeaderFooter;
++import net.md_5.bungee.protocol.packet.PlayerListItem;
++
++public interface TabListHandler
++{
++    /**
++     * Called so that this class may set member fields to keep track of its
++     * internal state. You should not do any packet sending or manipulation of
++     * the passed player, other than storing it.
++     *
++     * @param player the player to be associated with this list
++     */
++    void init(ProxiedPlayer player);
++
++    /**
++     * Called when this player first connects to the proxy.
++     */
++    void onConnect();
++
++    /**
++     * Called when a player first connects to the proxy.
++     */
++    void onServerChange();
++
++    /**
++     * Called when a players ping changes. The new ping will have not updated in
++     * the player instance until this method returns.
++     *
++     * @param ping the player's new ping.
++     */
++    void onPingChange(int ping);
++
++    /**
++     * Called when a player disconnects.
++     */
++    void onDisconnect();
++
++    /**
++     * Called when a list update packet is sent from server to client.
++     *
++     * @param packet The packet the server sent
++     */
++    void onUpdate(PlayerListItem packet);
++
++    /**
++     * Called when a list header footer update packet is sent from server to client.
++     *
++     * @param packet The packet the server sent
++     */
++    void onUpdate(PlayerListHeaderFooter packet);
++
++    /**
++     * Called after the players display name has been changed.
++     */
++    void onUpdateName();
++}
+diff --git a/protocol/src/main/java/net/md_5/bungee/protocol/packet/PlayerListItem.java b/protocol/src/main/java/net/md_5/bungee/protocol/packet/PlayerListItem.java
+index 92bacc7..b89bf00 100644
+--- a/protocol/src/main/java/net/md_5/bungee/protocol/packet/PlayerListItem.java
++++ b/protocol/src/main/java/net/md_5/bungee/protocol/packet/PlayerListItem.java
+@@ -5,10 +5,14 @@ import java.util.UUID;
+ import lombok.Data;
+ import lombok.EqualsAndHashCode;
+ import lombok.NoArgsConstructor;
++import net.md_5.bungee.api.chat.BaseComponent;
++import net.md_5.bungee.api.chat.TextComponent;
+ import net.md_5.bungee.protocol.AbstractPacketHandler;
+ import net.md_5.bungee.protocol.DefinedPacket;
+ import net.md_5.bungee.protocol.ProtocolConstants;
+ 
++import net.md_5.bungee.chat.ComponentSerializer;
++
+ @Data
+ @NoArgsConstructor
+ @EqualsAndHashCode(callSuper = false)
+@@ -52,10 +56,7 @@ public class PlayerListItem extends DefinedPacket
+                     }
+                     item.gamemode = DefinedPacket.readVarInt( buf );
+                     item.ping = DefinedPacket.readVarInt( buf );
+-                    if ( buf.readBoolean() )
+-                    {
+-                        item.displayName = DefinedPacket.readString( buf );
+-                    }
++                    processDisplayName(item,buf);
+                     break;
+                 case UPDATE_GAMEMODE:
+                     item.gamemode = DefinedPacket.readVarInt( buf );
+@@ -64,10 +65,19 @@ public class PlayerListItem extends DefinedPacket
+                     item.ping = DefinedPacket.readVarInt( buf );
+                     break;
+                 case UPDATE_DISPLAY_NAME:
+-                    if ( buf.readBoolean() )
+-                    {
+-                        item.displayName = DefinedPacket.readString( buf );
+-                    }
++                    processDisplayName(item,buf);
++            }
++        }
++    }
++
++    private void processDisplayName(Item item, ByteBuf buf){
++        if ( buf.readBoolean() ) {
++
++            try {
++                item.displayName = ComponentSerializer.parse(DefinedPacket.readString(buf));
++            } catch (Exception e) {
++                e.printStackTrace();
++                item.displayName = TextComponent.fromLegacyText(DefinedPacket.readString(buf));
+             }
+         }
+     }
+@@ -103,7 +113,7 @@ public class PlayerListItem extends DefinedPacket
+                     buf.writeBoolean( item.displayName != null );
+                     if ( item.displayName != null )
+                     {
+-                        DefinedPacket.writeString( item.displayName, buf );
++                        DefinedPacket.writeString( ComponentSerializer.toString(item.displayName), buf );
+                     }
+                     break;
+                 case UPDATE_GAMEMODE:
+@@ -116,7 +126,7 @@ public class PlayerListItem extends DefinedPacket
+                     buf.writeBoolean( item.displayName != null );
+                     if ( item.displayName != null )
+                     {
+-                        DefinedPacket.writeString( item.displayName, buf );
++                        DefinedPacket.writeString( ComponentSerializer.toString(item.displayName), buf );
+                     }
+                     break;
+             }
+@@ -157,7 +167,7 @@ public class PlayerListItem extends DefinedPacket
+         private int ping;
+ 
+         // ADD_PLAYER & UPDATE_DISPLAY_NAME
+-        private String displayName;
++        private BaseComponent[] displayName;
+ 
+     }
+ }
+diff --git a/proxy/src/main/java/net/md_5/bungee/UserConnection.java b/proxy/src/main/java/net/md_5/bungee/UserConnection.java
+index 3fc4de8..0618aed 100644
+--- a/proxy/src/main/java/net/md_5/bungee/UserConnection.java
++++ b/proxy/src/main/java/net/md_5/bungee/UserConnection.java
+@@ -27,10 +27,12 @@ import lombok.NonNull;
+ import lombok.RequiredArgsConstructor;
+ import lombok.Setter;
+ import net.md_5.bungee.api.Callback;
++import net.md_5.bungee.api.GameProfile;
+ import net.md_5.bungee.api.ChatMessageType;
+ import net.md_5.bungee.api.ProxyServer;
+ import net.md_5.bungee.api.ServerConnectRequest;
+ import net.md_5.bungee.api.SkinConfiguration;
++import net.md_5.bungee.api.GameProfile.Property;
+ import net.md_5.bungee.api.Title;
+ import net.md_5.bungee.api.chat.BaseComponent;
+ import net.md_5.bungee.api.chat.TextComponent;
+@@ -39,8 +41,10 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
+ import net.md_5.bungee.api.event.PermissionCheckEvent;
+ import net.md_5.bungee.api.event.ServerConnectEvent;
+ import net.md_5.bungee.api.score.Scoreboard;
++import net.md_5.bungee.api.tab.TabListHandler;
+ import net.md_5.bungee.chat.ComponentSerializer;
+ import net.md_5.bungee.connection.InitialHandler;
++import net.md_5.bungee.connection.LoginResult;
+ import net.md_5.bungee.entitymap.EntityMap;
+ import net.md_5.bungee.forge.ForgeClientHandler;
+ import net.md_5.bungee.forge.ForgeConstants;
+@@ -60,6 +64,8 @@ import net.md_5.bungee.protocol.packet.Kick;
+ import net.md_5.bungee.protocol.packet.PlayerListHeaderFooter;
+ import net.md_5.bungee.protocol.packet.PluginMessage;
+ import net.md_5.bungee.protocol.packet.SetCompression;
++import net.md_5.bungee.tab.Global;
++import net.md_5.bungee.tab.GlobalPing;
+ import net.md_5.bungee.tab.ServerUnique;
+ import net.md_5.bungee.tab.TabList;
+ import net.md_5.bungee.util.CaseInsensitiveSet;
+@@ -103,12 +109,14 @@ public final class UserConnection implements ProxiedPlayer
+     @Setter
+     private ServerInfo reconnectServer;
+     @Getter
+-    private TabList tabListHandler;
++    private TabListHandler tabListHandler;
+     @Getter
+     @Setter
+     private int gamemode;
+     @Getter
+     private int compressionThreshold = -1;
++    @Getter
++    private GameProfile profile;
+     // Used for trying multiple servers in order
+     @Setter
+     private Queue<String> serverJoinQueue;
+@@ -169,7 +177,7 @@ public final class UserConnection implements ProxiedPlayer
+ 
+         this.displayName = name;
+ 
+-        tabListHandler = new ServerUnique( this );
++        setTabListHandler(null);
+ 
+         Collection<String> g = bungee.getConfigurationAdapter().getGroups( name );
+         g.addAll( bungee.getConfigurationAdapter().getGroups( getUniqueId().toString() ) );
+@@ -178,6 +186,24 @@ public final class UserConnection implements ProxiedPlayer
+             addGroups( s );
+         }
+ 
++
++        LoginResult result = getPendingConnection().getLoginProfile();
++        Property[] properties = null;
++        if (result != null && result.getProperties() != null)
++        {
++            properties = new Property[result.getProperties().length];
++            for (int i = 0; i < result.getProperties().length; ++i)
++            {
++                properties[i] = new Property(result.getProperties()[i].getName(), result.getProperties()[i].getValue(), result.getProperties()[i].getSignature());
++            }
++        }
++        else
++        {
++            properties = new Property[0];
++        }
++
++        this.profile = new GameProfile(getUniqueId(), getPendingConnection().getName(), properties);
++
+         forgeClientHandler = new ForgeClientHandler( this );
+ 
+         // No-config FML handshake marker.
+@@ -204,6 +230,7 @@ public final class UserConnection implements ProxiedPlayer
+     {
+         Preconditions.checkNotNull( name, "displayName" );
+         displayName = name;
++        tabListHandler.onUpdateName();
+     }
+ 
+     @Override
+@@ -729,6 +756,31 @@ public final class UserConnection implements ProxiedPlayer
+         }
+     }
+ 
++    public void setTabListHandler(TabListHandler handler)
++    {
++        if (handler == null)
++        {
++            switch ( getPendingConnection().getListener().getTabListType() )
++            {
++                case "GLOBAL":
++                    tabListHandler = new Global();
++                    break;
++                case "SERVER":
++                    tabListHandler = new ServerUnique();
++                    break;
++                default:
++                    tabListHandler = new GlobalPing();
++                    break;
++            }
++        }
++        else
++        {
++            tabListHandler = handler;
++        }
++
++        tabListHandler.init(this);
++    }
++
+     @Override
+     public boolean isConnected()
+     {
+diff --git a/proxy/src/main/java/net/md_5/bungee/connection/InitialHandler.java b/proxy/src/main/java/net/md_5/bungee/connection/InitialHandler.java
+index 3a9dab6..8e5b8bd 100644
+--- a/proxy/src/main/java/net/md_5/bungee/connection/InitialHandler.java
++++ b/proxy/src/main/java/net/md_5/bungee/connection/InitialHandler.java
+@@ -134,7 +134,8 @@ public class InitialHandler extends PacketHandler implements PendingConnection
+     {
+         if ( packet.packet == null )
+         {
+-            throw new QuietException( "Unexpected packet received during login process! " + BufUtil.dump( packet.buf, 16 ) );
++            bungee.getLogger().warning( this.toString() + ": Unexpected packet received during login process!\n" + BufUtil.dump( packet.buf, 16 ) ); // Waterfall
++            ch.close(); // Waterfall
+         }
+     }
+ 
+@@ -252,7 +253,7 @@ public class InitialHandler extends PacketHandler implements PendingConnection
+         {
+             int protocol = ( ProtocolConstants.SUPPORTED_VERSION_IDS.contains( handshake.getProtocolVersion() ) ) ? handshake.getProtocolVersion() : bungee.getProtocolVersion();
+             pingBack.done( new ServerPing(
+-                    new ServerPing.Protocol( bungee.getName() + " " + bungee.getGameVersion(), protocol ),
++                    new ServerPing.Protocol( "Minecraft " + bungee.getGameVersion(), protocol ),
+                     new ServerPing.Players( listener.getMaxPlayers(), bungee.getOnlineCount(), null ),
+                     motd, BungeeCord.getInstance().config.getFaviconObject() ),
+                     null );
+@@ -423,7 +424,6 @@ public class InitialHandler extends PacketHandler implements PendingConnection
+             sha.update( bit );
+         }
+         String encodedHash = URLEncoder.encode( new BigInteger( sha.digest() ).toString( 16 ), "UTF-8" );
+-
+         String preventProxy = ( ( BungeeCord.getInstance().config.isPreventProxyConnections() ) ? "&ip=" + URLEncoder.encode( getAddress().getAddress().getHostAddress(), "UTF-8" ) : "" );
+         String authURL = "https://sessionserver.mojang.com/session/minecraft/hasJoined?username=" + encName + "&serverId=" + encodedHash + preventProxy;
+ 
+@@ -524,6 +524,8 @@ public class InitialHandler extends PacketHandler implements PendingConnection
+ 
+                             ch.getHandle().pipeline().get( HandlerBoss.class ).setHandler( new UpstreamBridge( bungee, userCon ) );
+                             bungee.getPluginManager().callEvent( new PostLoginEvent( userCon ) );
++                            userCon.getTabListHandler().onConnect();
++
+                             ServerInfo server;
+                             if ( bungee.getReconnectHandler() != null )
+                             {
+diff --git a/proxy/src/main/java/net/md_5/bungee/tab/Global.java b/proxy/src/main/java/net/md_5/bungee/tab/Global.java
+new file mode 100644
+index 0000000..a6b5148
+--- /dev/null
++++ b/proxy/src/main/java/net/md_5/bungee/tab/Global.java
+@@ -0,0 +1,150 @@
++package net.md_5.bungee.tab;
++
++import net.md_5.bungee.BungeeCord;
++import net.md_5.bungee.UserConnection;
++import net.md_5.bungee.api.chat.TextComponent;
++import net.md_5.bungee.api.connection.ProxiedPlayer;
++import net.md_5.bungee.connection.LoginResult;
++import net.md_5.bungee.protocol.packet.PlayerListItem;
++
++import java.util.Collection;
++
++public class Global extends TabList
++{
++
++    private boolean sentPing;
++
++    @Override
++    public void onUpdate(PlayerListItem playerListItem)
++    {
++
++    }
++
++    @Override
++    public void onPingChange(int ping)
++    {
++        if ( !sentPing )
++        {
++            sentPing = true;
++            PlayerListItem packet = new PlayerListItem();
++            packet.setAction( PlayerListItem.Action.UPDATE_LATENCY );
++            PlayerListItem.Item item = new PlayerListItem.Item();
++            item.setUuid( player.getUniqueId() );
++            item.setUsername( player.getName() );
++            item.setDisplayName( TextComponent.fromLegacyText( player.getDisplayName() ) );
++            item.setPing( player.getPing() );
++            packet.setItems( new PlayerListItem.Item[]
++            {
++                item
++            } );
++            BungeeCord.getInstance().broadcast( packet );
++        }
++    }
++
++    @Override
++    public void onServerChange()
++    {
++
++    }
++
++    @Override
++    public void onConnect()
++    {
++        PlayerListItem playerListItem = new PlayerListItem();
++        playerListItem.setAction( PlayerListItem.Action.ADD_PLAYER );
++        Collection<ProxiedPlayer> players = BungeeCord.getInstance().getPlayers();
++        PlayerListItem.Item[] items = new PlayerListItem.Item[ players.size() ];
++        playerListItem.setItems( items );
++        int i = 0;
++        for ( ProxiedPlayer p : players )
++        {
++            PlayerListItem.Item item = items[i++] = new PlayerListItem.Item();
++            item.setUuid( p.getUniqueId() );
++            item.setUsername( p.getName() );
++            item.setDisplayName( TextComponent.fromLegacyText( p.getDisplayName() ) );
++            LoginResult loginResult = ( (UserConnection) p ).getPendingConnection().getLoginProfile();
++            if ( loginResult != null )
++            {
++                String[][] props = new String[ loginResult.getProperties().length ][];
++                for ( int j = 0; j < props.length; j++ )
++                {
++                    props[j] = new String[]
++                    {
++                        loginResult.getProperties()[j].getName(),
++                        loginResult.getProperties()[j].getValue(),
++                        loginResult.getProperties()[j].getSignature()
++                    };
++                }
++                item.setProperties( props );
++            } else
++            {
++                item.setProperties( new String[ 0 ][ 0 ] );
++            }
++            item.setGamemode( ( (UserConnection) p ).getGamemode() );
++            item.setPing( p.getPing() );
++        }
++        player.unsafe().sendPacket( playerListItem );
++        PlayerListItem packet = new PlayerListItem();
++        packet.setAction( PlayerListItem.Action.ADD_PLAYER );
++        PlayerListItem.Item item = new PlayerListItem.Item();
++        item.setUuid( player.getUniqueId() );
++        item.setUsername( player.getName() );
++        item.setDisplayName( TextComponent.fromLegacyText( player.getDisplayName() ) );
++        LoginResult loginResult = ( (UserConnection) player ).getPendingConnection().getLoginProfile();
++        if ( loginResult != null )
++        {
++            String[][] props = new String[ loginResult.getProperties().length ][];
++            for ( int j = 0; j < props.length; j++ )
++            {
++                props[j] = new String[]
++                {
++                    loginResult.getProperties()[j].getName(),
++                    loginResult.getProperties()[j].getValue(),
++                    loginResult.getProperties()[j].getSignature()
++                };
++            }
++            item.setProperties( props );
++        } else
++        {
++            item.setProperties( new String[ 0 ][ 0 ] );
++        }
++        item.setGamemode( ( (UserConnection) player ).getGamemode() );
++        item.setPing( player.getPing() );
++        packet.setItems( new PlayerListItem.Item[]
++        {
++            item
++        } );
++        BungeeCord.getInstance().broadcast( packet );
++    }
++
++    @Override
++    public void onDisconnect()
++    {
++        PlayerListItem packet = new PlayerListItem();
++        packet.setAction( PlayerListItem.Action.REMOVE_PLAYER );
++        PlayerListItem.Item item = new PlayerListItem.Item();
++        item.setUuid( player.getUniqueId() );
++        item.setUsername( player.getName() );
++        packet.setItems( new PlayerListItem.Item[]
++        {
++            item
++        } );
++        BungeeCord.getInstance().broadcast( packet );
++    }
++
++    @Override
++    public void onUpdateName()
++    {
++        PlayerListItem packet = new PlayerListItem();
++        packet.setAction( PlayerListItem.Action.UPDATE_DISPLAY_NAME );
++        PlayerListItem.Item item = new PlayerListItem.Item();
++        item.setUuid( player.getUniqueId() );
++        item.setUsername( player.getName() );
++        item.setDisplayName(TextComponent.fromLegacyText( player.getDisplayName() ) );
++        packet.setItems( new PlayerListItem.Item[]
++        {
++            item
++        } );
++        BungeeCord.getInstance().broadcast( packet );
++    }
++}
+diff --git a/proxy/src/main/java/net/md_5/bungee/tab/GlobalPing.java b/proxy/src/main/java/net/md_5/bungee/tab/GlobalPing.java
+new file mode 100644
+index 0000000..494fad7
+--- /dev/null
++++ b/proxy/src/main/java/net/md_5/bungee/tab/GlobalPing.java
+@@ -0,0 +1,34 @@
++package net.md_5.bungee.tab;
++
++import net.md_5.bungee.BungeeCord;
++import net.md_5.bungee.api.chat.TextComponent;
++import net.md_5.bungee.protocol.packet.PlayerListItem;
++
++public class GlobalPing extends Global
++{
++
++    private static final int PING_THRESHOLD = 20;
++    /*========================================================================*/
++    private int lastPing;
++
++    @Override
++    public void onPingChange(int ping)
++    {
++        if ( ping - PING_THRESHOLD > lastPing && ping + PING_THRESHOLD < lastPing )
++        {
++            lastPing = ping;
++            PlayerListItem packet = new PlayerListItem();
++            packet.setAction( PlayerListItem.Action.UPDATE_LATENCY );
++            PlayerListItem.Item item = new PlayerListItem.Item();
++            item.setUuid( player.getUniqueId() );
++            item.setUsername( player.getName() );
++            item.setDisplayName( TextComponent.fromLegacyText( player.getDisplayName() ) );
++            item.setPing( player.getPing() );
++            packet.setItems( new PlayerListItem.Item[]
++            {
++                item
++            } );
++            BungeeCord.getInstance().broadcast( packet );
++        }
++    }
++}
+diff --git a/proxy/src/main/java/net/md_5/bungee/tab/ServerUnique.java b/proxy/src/main/java/net/md_5/bungee/tab/ServerUnique.java
+index daf12f7..9ca055d 100644
+--- a/proxy/src/main/java/net/md_5/bungee/tab/ServerUnique.java
++++ b/proxy/src/main/java/net/md_5/bungee/tab/ServerUnique.java
+@@ -11,11 +11,6 @@ public class ServerUnique extends TabList
+ 
+     private final Collection<UUID> uuids = new HashSet<>();
+ 
+-    public ServerUnique(ProxiedPlayer player)
+-    {
+-        super( player );
+-    }
+-
+     @Override
+     public void onUpdate(PlayerListItem playerListItem)
+     {
+@@ -50,6 +45,7 @@ public class ServerUnique extends TabList
+             PlayerListItem.Item item = items[i++] = new PlayerListItem.Item();
+             item.setUuid( uuid );
+         }
++
+         packet.setItems( items );
+         player.unsafe().sendPacket( packet );
+         uuids.clear();
+@@ -64,6 +60,29 @@ public class ServerUnique extends TabList
+     @Override
+     public void onDisconnect()
+     {
++        if ( player.getServer() != null )
++        {
++            // Manually remove from everyone's tab list
++            // since the packet from the server arrives
++            // too late
++            PlayerListItem packet = new PlayerListItem();
++            packet.setAction( PlayerListItem.Action.REMOVE_PLAYER );
++            PlayerListItem.Item item = new PlayerListItem.Item();
++            item.setUuid( player.getUniqueId() );
++            packet.setItems( new PlayerListItem.Item[]
++            {
++                item
++            } );
++            for ( ProxiedPlayer player : player.getServer().getInfo().getPlayers() )
++            {
++                player.unsafe().sendPacket( packet );
++            }
++        }
++    }
++
++    @Override
++    public void onUpdateName()
++    {
+ 
+     }
+ }
+diff --git a/proxy/src/main/java/net/md_5/bungee/tab/TabList.java b/proxy/src/main/java/net/md_5/bungee/tab/TabList.java
+index 7d79ef7..336219b 100644
+--- a/proxy/src/main/java/net/md_5/bungee/tab/TabList.java
++++ b/proxy/src/main/java/net/md_5/bungee/tab/TabList.java
+@@ -1,17 +1,25 @@
+ package net.md_5.bungee.tab;
+ 
+-import lombok.RequiredArgsConstructor;
++import lombok.NoArgsConstructor;
+ import net.md_5.bungee.BungeeCord;
+ import net.md_5.bungee.UserConnection;
+ import net.md_5.bungee.api.connection.ProxiedPlayer;
++import net.md_5.bungee.api.tab.TabListHandler;
+ import net.md_5.bungee.connection.LoginResult;
++import net.md_5.bungee.protocol.packet.PlayerListHeaderFooter;
+ import net.md_5.bungee.protocol.packet.PlayerListItem;
+ 
+-@RequiredArgsConstructor
+-public abstract class TabList
++@NoArgsConstructor
++public abstract class TabList implements TabListHandler
+ {
+ 
+-    protected final ProxiedPlayer player;
++    protected ProxiedPlayer player;
++
++    @Override
++    public void init(ProxiedPlayer player)
++    {
++        this.player = player;
++    }
+ 
+     public abstract void onUpdate(PlayerListItem playerListItem);
+ 
+@@ -65,4 +73,10 @@ public abstract class TabList
+         }
+         return playerListItem;
+     }
++
++    @Override
++    public void onUpdate(PlayerListHeaderFooter packet)
++    {
++        player.unsafe().sendPacket(packet);
++    }
+ }
+-- 
+1.9.1
+
