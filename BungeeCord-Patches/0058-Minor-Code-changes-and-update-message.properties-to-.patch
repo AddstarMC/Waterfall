@@ -1,0 +1,574 @@
+From dbba90ccde87886478b465fed58ca9944e2d9689 Mon Sep 17 00:00:00 2001
+From: Narimm <benjicharlton@gmail.com>
+Date: Wed, 24 Apr 2019 07:57:13 +1000
+Subject: [PATCH] Minor Code changes and update message.properties to be 
+ friendlier Update POM to use addstar groupid to ensure downstream 
+ dependencies are based of the correct snapshots.
+
+Signed-off-by: Narimm <benjicharlton@gmail.com>
+
+diff --git a/api/pom.xml b/api/pom.xml
+index b79d7ed..e4651da 100644
+--- a/api/pom.xml
++++ b/api/pom.xml
+@@ -4,13 +4,12 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-parent</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-api</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+@@ -20,25 +19,25 @@
+ 
+     <dependencies>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
++            <groupId>au.com.addstar</groupId>
+             <artifactId>waterfall-chat</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
++            <groupId>au.com.addstar</groupId>
+             <artifactId>waterfall-config</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
++            <groupId>au.com.addstar</groupId>
+             <artifactId>waterfall-event</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
++            <groupId>au.com.addstar</groupId>
+             <artifactId>waterfall-protocol</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+diff --git a/bootstrap/pom.xml b/bootstrap/pom.xml
+index 487fb3b..91a39de 100644
+--- a/bootstrap/pom.xml
++++ b/bootstrap/pom.xml
+@@ -4,13 +4,12 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-parent</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-bootstrap</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+@@ -27,7 +26,7 @@
+ 
+     <dependencies>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
++            <groupId>au.com.addstar</groupId>
+             <artifactId>waterfall-proxy</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+diff --git a/chat/pom.xml b/chat/pom.xml
+index 7ad05ab..adf6380 100644
+--- a/chat/pom.xml
++++ b/chat/pom.xml
+@@ -4,13 +4,12 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-parent</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-chat</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+diff --git a/config/pom.xml b/config/pom.xml
+index 9d0fe24..1a77e5b 100644
+--- a/config/pom.xml
++++ b/config/pom.xml
+@@ -4,13 +4,12 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-parent</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-config</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+diff --git a/event/pom.xml b/event/pom.xml
+index d6efe09..bc23e9a 100644
+--- a/event/pom.xml
++++ b/event/pom.xml
+@@ -4,13 +4,12 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-parent</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-event</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+diff --git a/log/pom.xml b/log/pom.xml
+index fd999b5..5129a5f 100644
+--- a/log/pom.xml
++++ b/log/pom.xml
+@@ -4,13 +4,12 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-parent</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-log</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+@@ -26,7 +25,7 @@
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
++            <groupId>au.com.addstar</groupId>
+             <artifactId>waterfall-chat</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+diff --git a/log4j/pom.xml b/log4j/pom.xml
+index e03fe0d..1764120 100644
+--- a/log4j/pom.xml
++++ b/log4j/pom.xml
+@@ -3,13 +3,12 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-parent</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-log4j</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+diff --git a/module/cmd-alert/pom.xml b/module/cmd-alert/pom.xml
+index 6f3aa27..bac9529 100644
+--- a/module/cmd-alert/pom.xml
++++ b/module/cmd-alert/pom.xml
+@@ -1,16 +1,14 @@
+-
+ <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-module</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-module-cmd-alert</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+diff --git a/module/cmd-find/nb-configuration.xml b/module/cmd-find/nb-configuration.xml
+deleted file mode 100644
+index 7e46592..0000000
+--- a/module/cmd-find/nb-configuration.xml
++++ /dev/null
+@@ -1,31 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project-shared-configuration>
+-    <!--
+-    This file contains additional configuration written by modules in the NetBeans IDE.
+-    The configuration is intended to be shared among all the users of project and
+-    therefore it is assumed to be part of version control checkout.
+-    Without this configuration present, some functionality in the IDE may be limited or fail altogether.
+-    -->
+-    <properties xmlns="http://www.netbeans.org/ns/maven-properties-data/1">
+-        <!--
+-        Properties that influence various parts of the IDE, especially code formatting and the like. 
+-        You can copy and paste the single properties, into the pom.xml file and the IDE will pick them up.
+-        That way multiple projects can share the same settings (useful for formatting rules for example).
+-        Any value defined here will override the pom.xml file value but is only applicable to the current project.
+-        -->
+-        <org-netbeans-modules-editor-indent.CodeStyle.usedProfile>project</org-netbeans-modules-editor-indent.CodeStyle.usedProfile>
+-        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.classDeclBracePlacement>NEW_LINE</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.classDeclBracePlacement>
+-        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.otherBracePlacement>NEW_LINE</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.otherBracePlacement>
+-        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.methodDeclBracePlacement>NEW_LINE</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.methodDeclBracePlacement>
+-        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinMethodCallParens>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinMethodCallParens>
+-        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinSwitchParens>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinSwitchParens>
+-        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinCatchParens>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinCatchParens>
+-        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinTryParens>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinTryParens>
+-        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinSynchronizedParens>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinSynchronizedParens>
+-        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinArrayInitBrackets>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinArrayInitBrackets>
+-        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinParens>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinParens>
+-        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinWhileParens>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinWhileParens>
+-        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinIfParens>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinIfParens>
+-        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinForParens>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.spaceWithinForParens>
+-    </properties>
+-</project-shared-configuration>
+diff --git a/module/cmd-find/pom.xml b/module/cmd-find/pom.xml
+index 01d9528..838a467 100644
+--- a/module/cmd-find/pom.xml
++++ b/module/cmd-find/pom.xml
+@@ -4,13 +4,12 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-module</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-module-cmd-find</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+diff --git a/module/cmd-list/pom.xml b/module/cmd-list/pom.xml
+index bc5dc21..a12b51d 100644
+--- a/module/cmd-list/pom.xml
++++ b/module/cmd-list/pom.xml
+@@ -4,13 +4,12 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-module</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-module-cmd-list</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+diff --git a/module/cmd-send/pom.xml b/module/cmd-send/pom.xml
+index f664217..e83b0f1 100644
+--- a/module/cmd-send/pom.xml
++++ b/module/cmd-send/pom.xml
+@@ -4,13 +4,12 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-module</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-module-cmd-send</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+diff --git a/module/cmd-server/pom.xml b/module/cmd-server/pom.xml
+index c93ab2c..51a0c6e 100644
+--- a/module/cmd-server/pom.xml
++++ b/module/cmd-server/pom.xml
+@@ -4,13 +4,12 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-module</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-module-cmd-server</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+diff --git a/module/pom.xml b/module/pom.xml
+index aa604f3..1323840 100644
+--- a/module/pom.xml
++++ b/module/pom.xml
+@@ -4,13 +4,12 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-parent</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-module</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>pom</packaging>
+@@ -34,7 +33,7 @@
+ 
+     <dependencies>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
++            <groupId>au.com.addstar</groupId>
+             <artifactId>waterfall-api</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+diff --git a/module/reconnect-yaml/pom.xml b/module/reconnect-yaml/pom.xml
+index e34bac4..2d17a6d 100644
+--- a/module/reconnect-yaml/pom.xml
++++ b/module/reconnect-yaml/pom.xml
+@@ -4,13 +4,12 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-module</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-module-reconnect-yaml</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+diff --git a/native/pom.xml b/native/pom.xml
+index b5aeb99..f59b67c 100644
+--- a/native/pom.xml
++++ b/native/pom.xml
+@@ -4,13 +4,12 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-parent</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-native</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+diff --git a/pom.xml b/pom.xml
+index 98df957..bc7f056 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -10,7 +10,7 @@
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
++    <groupId>au.com.addstar</groupId>
+     <artifactId>waterfall-parent</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>pom</packaging>
+diff --git a/protocol/pom.xml b/protocol/pom.xml
+index 2493fc1..5d81ad3 100644
+--- a/protocol/pom.xml
++++ b/protocol/pom.xml
+@@ -4,13 +4,12 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-parent</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-protocol</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+@@ -41,7 +40,7 @@
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
++            <groupId>au.com.addstar</groupId>
+             <artifactId>waterfall-chat</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+diff --git a/proxy/pom.xml b/proxy/pom.xml
+index f15927e..c0261cb 100644
+--- a/proxy/pom.xml
++++ b/proxy/pom.xml
+@@ -4,13 +4,12 @@
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-parent</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-proxy</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+@@ -63,31 +62,31 @@
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
++            <groupId>au.com.addstar</groupId>
+             <artifactId>waterfall-api</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
++            <groupId>au.com.addstar</groupId>
+             <artifactId>waterfall-log4j</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
++            <groupId>au.com.addstar</groupId>
+             <artifactId>waterfall-native</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
++            <groupId>au.com.addstar</groupId>
+             <artifactId>waterfall-protocol</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
++            <groupId>au.com.addstar</groupId>
+             <artifactId>waterfall-query</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+diff --git a/proxy/src/main/java/net/md_5/bungee/module/JenkinsModuleSource.java b/proxy/src/main/java/net/md_5/bungee/module/JenkinsModuleSource.java
+index 9b20d0d..87d02bf 100644
+--- a/proxy/src/main/java/net/md_5/bungee/module/JenkinsModuleSource.java
++++ b/proxy/src/main/java/net/md_5/bungee/module/JenkinsModuleSource.java
+@@ -18,7 +18,7 @@ public class JenkinsModuleSource implements ModuleSource
+         System.out.println( "Attempting to Jenkins download module " + module.getName() + " v" + version.getBuild() );
+         try
+         {
+-            URL website = new URL( "https://papermc.io/ci/job/Waterfall/" + version.getBuild() + "/artifact/Waterfall-Proxy/module/" + module.getName().replace( '_', '-' ) + "/target/" + module.getName() + ".jar" );
++            URL website = new URL( "https://jenkins.addstar.com.au/job/Waterfall/" + version.getBuild() + "/artifact/Waterfall-Proxy/module/" + module.getName().replace( '_', '-' ) + "/target/" + module.getName() + ".jar" );
+             URLConnection con = website.openConnection();
+             // 15 second timeout at various stages
+             con.setConnectTimeout( 15000 );
+diff --git a/proxy/src/main/resources/messages.properties b/proxy/src/main/resources/messages.properties
+index dfb58c1..05a1684 100644
+--- a/proxy/src/main/resources/messages.properties
++++ b/proxy/src/main/resources/messages.properties
+@@ -4,23 +4,24 @@ already_connected_proxy=\u00a7cYou are already connected to this proxy!
+ already_connecting=\u00a7cAlready connecting to this server!
+ command_list=\u00a7a[{0}] \u00a7e({1}): \u00a7r{2}
+ connect_kick=\u00a7cKicked whilst connecting to {0}: {1}
++connect_kick_outdated_forge=\u00a7cYour version of Forge is outdated. Please update Forge and try again.
+ current_server=\u00a76You are currently connected to {0}.
+ fallback_kick=\u00a7cCould not connect to a default or fallback server, please try again later: {0}
+ fallback_lobby=\u00a7cCould not connect to target server, you have been moved to a fallback server.
+ lost_connection=[Proxy] Lost connection to server.
+-mojang_fail=Error occurred while contacting login servers, are they down?
++mojang_fail=\u00a7cUnable to authenticate with login servers.. Please try again soon..
+ no_permission=\u00a7cYou do not have permission to execute this command!
+-no_server=\u00a7cThe specified server does not exist.
+-no_server_permission=\u00a7cYou don't have permission to access this server.
+-outdated_client=Outdated client! Please use {0}
+-outdated_server=Outdated server! I'm still on {0}
+-proxy_full=Server is full!
+-restart=[Proxy] Proxy restarting.
++no_server=\u00a7cThe specified server does not exist
++no_server_permission=\u00a7cYou don't have permission to access this server
++outdated_client=\u00a7cSorry, but your Minecraft client is outdated. Please update your client.
++outdated_server=\u00a7cSorry, we do not support your Minecraft client version. Please downgrade your client.
++proxy_full=\u00a7cSorry, the Addstar MC Server Network is currently full.
++restart=\u00a7cServer gateway is restarting.. Please try again soon..
+ server_kick=[Kicked] 
+ server_list=\u00a76You may connect to the following servers at this time: 
+-server_went_down=\u00a7cThe server you were previously on went down, you have been connected to a fallback server
++server_went_down=\u00a7cThe server you were previously on went down, you have been connected to the hub.
+ total_players=Total players online: {0}
+-name_too_long=Cannot have username longer than 16 characters
++name_too_long=\u00a7cSorry, your username cannot be longer than 16 characters. Please contact Mojang support.
+ name_invalid=Username contains invalid characters.
+-ping_cannot_connect=\u00a7c[Bungee] Can't connect to server.
++ping_cannot_connect=\u00a7cUnable to connect to server.. Please try again soon..
+ offline_mode_player=Not authenticated with Minecraft.net
+diff --git a/query/pom.xml b/query/pom.xml
+index 1fd5402..4774697 100644
+--- a/query/pom.xml
++++ b/query/pom.xml
+@@ -1,16 +1,14 @@
+-
+ <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+ 
+     <parent>
+-        <groupId>io.github.waterfallmc</groupId>
++        <groupId>au.com.addstar</groupId>
+         <artifactId>waterfall-parent</artifactId>
+         <version>1.14-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>io.github.waterfallmc</groupId>
+     <artifactId>waterfall-query</artifactId>
+     <version>1.14-SNAPSHOT</version>
+     <packaging>jar</packaging>
+@@ -26,7 +24,7 @@
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+-            <groupId>io.github.waterfallmc</groupId>
++            <groupId>au.com.addstar</groupId>
+             <artifactId>waterfall-api</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+-- 
+1.9.1
+
